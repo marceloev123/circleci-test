@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Create Keystore file
           command: echo "${key_store_base64}" | base64 -d > /tmp/__keystore.jks
-      -run:
+      - run:
           name: Install Dependencies
           command: npm install
       - run:
