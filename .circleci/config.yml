@@ -11,6 +11,7 @@ jobs:
       build_lane:
         type: string
         default: "android"
+        description: "The name of the fastlane lane to run"
       java_version:
         type: string
         default: "17"
