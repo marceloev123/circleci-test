@@ -15,6 +15,7 @@ jobs:
       java_version:
         type: string
         default: "17"
+        description: "Java version"
       enforced_branch:
         type: string
         default: ""
