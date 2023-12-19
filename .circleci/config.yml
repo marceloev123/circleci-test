@@ -81,8 +81,8 @@ jobs:
           name: Create Keystore file
           command: echo "${key_store_base64}" | base64 -d > /tmp/__keystore.jks
       - run:
-          name: Install Dependencies
-          command: npm install
+          name: Install yarn
+          command: npm install -g yarn
       - run:
           name: Run Fastlane
           command: |
