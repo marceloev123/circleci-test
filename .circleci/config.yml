@@ -78,6 +78,10 @@ jobs:
           command: |
             sudo apt install -y android-sdk
             echo $ANDROID_HOME 
+      - run:
+          name: Chmod permissions 
+          #if permission for Gradlew Dependencies fail, use this.  #         
+          command: sudo chmod +x ./gradlew
       - ruby/install:
           version: "3.1.2"
       - run:
@@ -105,7 +109,7 @@ jobs:
             commit_increment: "${commit_increment}"
             package_name: "${package_name}"
             google_json_file: /tmp/__google_credentials.json
-            android_home: /usr/lib/android-sdk
+            android_home: /usr/local/android-sdk-linux ./gradlew
             android_artifact: "${artifact}"
             android_flavor: "${flavor}"
             android_build_type: "${build_type}"
