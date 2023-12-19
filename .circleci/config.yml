@@ -1,0 +1,117 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.1.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:stable
+    parameters:
+      build_lane:
+        type: string
+        default: "android"
+      java_version:
+        type: string
+        default: "17"
+      enforced_branch:
+        type: string
+        default: ""
+      run_id_as_build:
+        type: string
+        default: "true"
+      commit_increment:
+        type: string
+        default: ""
+      publish_build:
+        type: string
+        default: "true"
+      package_name:
+        type: string
+      google_json_key_base64:
+        type: string
+      artifact:
+        type: string
+        default: "aab"
+      flavor:
+        type: string
+      build_type:
+        type: string
+        default: "Release"
+      skip_signing:
+        type: string
+        default: "false"
+      key_store_base64:
+        type: string
+      key_store_password:
+        type: string
+      key_alias:
+        type: string
+      key_password:
+        type: string
+        description: "Android Keystore key password (required if signing is enabled)"
+
+    steps:
+      - checkout
+      # Install OpenJDK 17 (Java)
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openjdk-17-jdk
+
+      # Install Node.js and NPM
+      - run:
+          name: Install Node.js and NPM
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y nodejs npm
+      - ruby/install:
+          version: "3.1.2"
+      - run:
+          name: Create Google JSON file
+          command: echo "${google_json_key_base64}" | base64 -d > /tmp/__google_credentials.json
+      - run:
+          name: Create Keystore file
+          command: echo "${key_store_base64}" | base64 -d > /tmp/__keystore.jks
+      - run:
+          name: Run Fastlane
+          command: |
+            chmod +x .circleci/fastlane.sh
+            .circleci/fastlane.sh
+          environment:
+            build_lane: "beta"
+            run_id_as_build: "${run_id_as_build}"
+            run_id: "${CIRCLECI_BUILD_NUM}"
+            enforced_branch: "${enforced_branch}"
+            commit_increment: "${commit_increment}"
+            package_name: "${package_name}"
+            google_json_file: /tmp/__google_credentials.json
+            android_artifact: "${artifact}"
+            android_flavor: "${flavor}"
+            android_build_type: "${build_type}"
+            android_skip_signing: "${skip_signing}"
+            android_store_file: /tmp/__keystore.jks
+            android_store_password: "${key_store_password}"
+            android_key_alias: "${key_alias}"
+            android_key_password: "${key_password}"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          build_lane: "android"
+          run_id_as_build: "${run_id_as_build}"
+          enforced_branch: "${enforced_branch}"
+          commit_increment: "${commit_increment}"
+          package_name: "com.example.app"
+          google_json_key_base64: "${google_json_key_base64}"
+          artifact: "apk"
+          flavor: "${flavor}"
+          build_type: "Debug"
+          skip_signing: "true"
+          key_store_base64: "${key_store_base64}"
+          key_store_password: "${key_store_password}"
+          key_alias: "${key_alias}"
+          key_password: "${key_password}"

@@ -1,0 +1,61 @@
+# frozen_string_literal: true
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# Optional: Change default platform if needed
+# default_platform(:android)
+
+before_all do |_, _|
+  enforced_branch = ENV['FL_ENFORCED_BRANCH']
+  UI.important('Fastlane is being run in a CI service, but no branch was enforced') if is_ci && !enforced_branch
+
+  setup_ci if is_ci
+  ensure_git_branch(branch: enforced_branch) if enforced_branch
+  ensure_git_status_clean(ignore_files: ['Gemfile.lock']) unless is_ci
+  git_pull if enforced_branch
+
+  # Optional: Execute extra actions after this line
+end
+
+# region android
+platform :android do
+  import_ravn_lanes(platform: 'android')
+
+  desc 'Build and publish an Android beta version (Play Store Beta)'
+  lane :beta do
+    build(track: 'beta')
+    upload(track: 'beta')
+    commit_and_push
+  end
+
+  desc 'Build and publish an Android release version (Play Store)'
+  lane :release do
+    build
+    upload
+    commit_and_push
+  end
+end
+# endregion android
+
+# region ios
+platform :ios do
+  import_ravn_lanes(platform: 'ios')
+
+  desc 'Build and publish an iOS beta version (TestFlight)'
+  lane :beta do
+    authenticate
+    build(env: 'beta')
+    upload(env: 'beta')
+    commit_and_push
+  end
+
+  desc 'Build and publish an iOS release version (App Store)'
+  lane :release do
+    authenticate
+    build
+    upload
+    commit_and_push
+  end
+end
+# endregion ios

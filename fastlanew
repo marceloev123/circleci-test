@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+# NOTE TO USERS:
+# AUTO-UPDATED SCRIPT NO NEED TO REVIEW CHANGES! DO NOT CHANGE!
+
+# NOTE TO MAINTAINERS:
+# Bump version using release.sh script
+
+readonly VERSION="0.3.1"
+
+if ! command -v bundle &> /dev/null; then
+  echo "Error: bundle is not installed." >&2
+  exit 1
+fi
+
+confirm() {
+  local prompt="$1"
+  local default=${2:-N}
+  local values
+
+  if [[ "${default}" = 'Y' ]]; then
+    values='(Y/n)'
+  else
+    values='(y/N)'
+  fi
+
+  read -rp "${prompt} ${values}: " yn <&2
+
+  yn=${yn:-$default}
+  yn=$(echo "$yn" | awk '{print tolower($0)}')
+  case "${yn}" in
+    y|yes)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+exec_install() {
+  curl -s https://raw.githubusercontent.com/ravnhq/mobile-cicd/main/install.sh | sh
+}
+
+check_auto_update() {
+  if [[ ! -t 0 ]]; then
+    echo ":: Update check skipped, the terminal is not interactive"
+    return 0
+  fi
+
+  local version_url='https://raw.githubusercontent.com/ravnhq/mobile-cicd/main/.version'
+  local remote_version
+
+  remote_version=$(curl -s "${version_url}" | sed 's/[[:space:]]//g')
+
+  if [[ "${VERSION}" != "${remote_version}" ]]; then
+    confirm ":: New version available, do you want to update?" 'Y' \
+      && exec_install \
+      && echo ":: Successfully updated, commit your changes before running this again" \
+      && exit 0
+  else
+    echo ":: You're up-to-date!"
+  fi
+}
+
+load_dotenv() {
+  set -o allexport
+  # shellcheck disable=SC1090
+  [[ -f .env ]] && source <(sed -e '/^#/d;/^\s*$/d' -e "s/'/'\\\''/g" -e "s/=\(.*\)/='\1'/g" .env)
+  set +o allexport
+}
+
+update_plugins() {
+  bundle install &> /dev/null
+  bundle update fastlane-plugin-ravn_mobile
+}
+
+if [[ "$1" == "self-update" ]]; then
+  echo ":: Checking if there's a new update..."
+  check_auto_update || true
+  exit 0
+fi
+
+check_auto_update || true
+load_dotenv
+update_plugins
+bundle exec fastlane "$@"
