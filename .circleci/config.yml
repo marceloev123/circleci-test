@@ -67,7 +67,10 @@ jobs:
           name: Install Node.js and NPM
           command: |
             sudo apt-get update
-            sudo apt-get install -y nodejs npm
+            sudo apt-get upgrade
+            sudo apt install -y curl
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt install -y nodejs
             node -v
       - ruby/install:
           version: "3.1.2"
