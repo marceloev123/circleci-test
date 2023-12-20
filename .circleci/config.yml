@@ -107,14 +107,14 @@ jobs:
             FL_GOOGLE_JSON_FILE: /tmp/__google_credentials.json
             FL_KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
             FL_KEY_STORE: /tmp/__keystore.jks
-            FL_ANDROID_ARTIFACT: "${ARTIFACT}"
-            FL_ANDROID_FLAVOR: "${FLAVOR}"
-            FL_ANDROID_BUILD_TYPE: "${BUILD_TYPE}"
-            FL_ANDROID_SKIP_SIGNING: "${SKIP_SIGNING}"
+            FL_ARTIFACT: "${FL_ARTIFACT}"
+            FL_FLAVOR: "${FL_FLAVOR}"
+            FL_BUILD_TYPE: "${BUILD_TYPE}"
+            FL_SKIP_SIGNING: "${SKIP_SIGNING}"
             FL_ANDROID_STORE_FILE: /tmp/__keystore.jks
-            FL_ANDROID_STORE_PASSWORD: "${FL_KEY_STORE_PASSWORD}"
-            FL_ANDROID_KEY_ALIAS: "${FL_KEY_ALIAS}"
-            FL_ANDROID_KEY_PASSWORD: "${FL_KEY_PASSWORD}"
+            FL_KEY_STORE_PASSWORD: "${FL_KEY_STORE_PASSWORD}"
+            FL_KEY_ALIAS: "${FL_KEY_ALIAS}"
+            FL_KEY_PASSWORD: "${FL_KEY_PASSWORD}"
 
 workflows:
   version: 2
