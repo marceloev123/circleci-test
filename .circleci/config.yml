@@ -112,9 +112,9 @@ jobs:
             FL_BUILD_TYPE: "${BUILD_TYPE}"
             FL_SKIP_SIGNING: "${SKIP_SIGNING}"
             FL_ANDROID_STORE_FILE: /tmp/__keystore.jks
-            FL_KEY_STORE_PASSWORD: "${FL_KEY_STORE_PASSWORD}"
-            FL_KEY_ALIAS: "${FL_KEY_ALIAS}"
-            FL_KEY_PASSWORD: "${FL_KEY_PASSWORD}"
+            FL_KEY_STORE_PASSWORD: /tmp/__keystore.jks
+            FL_KEY_ALIAS: "trak"
+            FL_KEY_PASSWORD: "llawliet"
 
 workflows:
   version: 2
