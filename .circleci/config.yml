@@ -72,7 +72,7 @@ jobs:
             sudo apt install -y curl
             curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
             sudo apt install -y nodejs
-            echo $ANDROID_HOME
+            echo ${ANDROID_HOME}
             node -v
       - ruby/install:
           version: "3.1.2"
@@ -123,6 +123,7 @@ workflows:
           package_name: "com.example.app"
           google_json_key_base64: "${google_json_key_base64}"
           artifact: "apk"
+          android_home: "/usr/local/android-sdk"
           flavor: "${flavor}"
           build_type: "Debug"
           skip_signing: "true"
