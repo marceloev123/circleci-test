@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   ruby: circleci/ruby@2.1.0
+  gradle: circleci/gradle@3.0.0
 
 jobs:
   build:
@@ -73,13 +74,6 @@ jobs:
             sudo apt install -y nodejs
             echo $ANDROID_HOME
             node -v
-      - run:
-          name: Install Android SDK
-          command: |
-            sudo apt install -y android-sdk
-      - run:
-          name: Export gradle instead of using from Home
-          command: gradle wrapper
       - ruby/install:
           version: "3.1.2"
       - run:
