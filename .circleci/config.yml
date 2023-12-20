@@ -104,6 +104,8 @@ jobs:
             PACKAGE_NAME: "${PACKAGE_NAME}"
             GOOGLE_JSON_FILE: /tmp/__google_credentials.json
             ANDROID_HOME: /usr/local/android-sdk-linux
+            KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
+            KEY_STORE: /tmp/__keystore.jks
             ANDROID_ARTIFACT: "${ARTIFACT}"
             ANDROID_FLAVOR: "${FLAVOR}"
             ANDROID_BUILD_TYPE: "${BUILD_TYPE}"
@@ -129,7 +131,7 @@ workflows:
           FLAVOR: "${FLAVOR}"
           BUILD_TYPE: "Debug"
           SKIP_SIGNING: "true"
-          KEY_STORE_BASE64: "MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI"
+          KEY_STORE_BASE64: "${KEY_STORE_BASE64}"
           KEY_STORE_PASSWORD: "${KEY_STORE_PASSWORD}"
           KEY_ALIAS: "${KEY_ALIAS}"
           KEY_PASSWORD: "${KEY_PASSWORD}"
