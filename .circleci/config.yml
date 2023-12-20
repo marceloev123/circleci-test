@@ -99,21 +99,22 @@ jobs:
             BUILD_LANE: "beta"
             RUN_ID_AS_BUILD: "${run_id_as_build}"
             RUN_ID: "${CIRCLECI_BUILD_NUM}"
-            ENFORCED_BRANCH: "${ENFORCED_BRANCH}"
-            COMMIT_INCREMENT: "${COMMIT_INCREMENT}"
-            PACKAGE_NAME: "${PACKAGE_NAME}"
-            GOOGLE_JSON_FILE: /tmp/__google_credentials.json
             ANDROID_HOME: /usr/local/android-sdk-linux
-            KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
-            KEY_STORE: /tmp/__keystore.jks
-            ANDROID_ARTIFACT: "${ARTIFACT}"
-            ANDROID_FLAVOR: "${FLAVOR}"
-            ANDROID_BUILD_TYPE: "${BUILD_TYPE}"
-            ANDROID_SKIP_SIGNING: "${SKIP_SIGNING}"
-            ANDROID_STORE_FILE: /tmp/__keystore.jks
-            ANDROID_STORE_PASSWORD: "${STORE_PASSWORD}"
-            ANDROID_KEY_ALIAS: "${KEY_ALIAS}"
-            ANDROID_KEY_PASSWORD: "${KEY_PASSWORD}"
+            FL_ENFORCED_BRANCH: "${FL_ENFORCED_BRANCH}"
+            FL_COMMIT_INCREMENT: "${FL_COMMIT_INCREMENT}"
+            FL_PUBLISH_BUILD: "${FL_PUBLISH_BUILD}"
+            FL_PACKAGE_NAME: "${PACKAGE_NAME}"
+            FL_GOOGLE_JSON_FILE: /tmp/__google_credentials.json
+            FL_KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
+            FL_KEY_STORE: /tmp/__keystore.jks
+            FL_ANDROID_ARTIFACT: "${ARTIFACT}"
+            FL_ANDROID_FLAVOR: "${FLAVOR}"
+            FL_ANDROID_BUILD_TYPE: "${BUILD_TYPE}"
+            FL_ANDROID_SKIP_SIGNING: "${SKIP_SIGNING}"
+            FL_ANDROID_STORE_FILE: /tmp/__keystore.jks
+            FL_ANDROID_STORE_PASSWORD: "${STORE_PASSWORD}"
+            FL_ANDROID_KEY_ALIAS: "${KEY_ALIAS}"
+            FL_ANDROID_KEY_PASSWORD: "${KEY_PASSWORD}"
 
 workflows:
   version: 2
@@ -122,16 +123,16 @@ workflows:
       - build:
           BUILD_LANE: "android"
           RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
-          ENFORCED_BRANCH: "${ENFORCED_BRANCH}"
-          COMMIT_INCREMENT: "${COMMIT_INCREMENT}"
-          PACKAGE_NAME: "com.example.app"
-          GOOGLE_JSON_KEY_BASE64: "${GOOGLE_JSON_KEY_BASE64}"
-          ARTIFACT: "apk"
-          ANDROID_HOME: "/usr/local/android-sdk"
-          FLAVOR: "${FLAVOR}"
-          BUILD_TYPE: "Debug"
-          SKIP_SIGNING: "true"
-          KEY_STORE_BASE64: "${KEY_STORE_BASE64}"
-          KEY_STORE_PASSWORD: "${KEY_STORE_PASSWORD}"
-          KEY_ALIAS: "${KEY_ALIAS}"
-          KEY_PASSWORD: "${KEY_PASSWORD}"
+          FL_ENFORCED_BRANCH: "${ENFORCED_BRANCH}"
+          FL_COMMIT_INCREMENT: "${COMMIT_INCREMENT}"
+          FL_PACKAGE_NAME: "com.example.app"
+          FL_GOOGLE_JSON_KEY_BASE64: "${GOOGLE_JSON_KEY_BASE64}"
+          FL_ARTIFACT: "apk"
+          FL_ANDROID_HOME: "/usr/local/android-sdk"
+          FL_FLAVOR: "${FLAVOR}"
+          FL_BUILD_TYPE: "Debug"
+          FL_SKIP_SIGNING: "true"
+          FL_KEY_STORE_BASE64: "${KEY_STORE_BASE64}"
+          FL_KEY_STORE_PASSWORD: "${KEY_STORE_PASSWORD}"
+          FL_KEY_ALIAS: "${KEY_ALIAS}"
+          FL_KEY_PASSWORD: "${KEY_PASSWORD}"
