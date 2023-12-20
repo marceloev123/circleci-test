@@ -112,9 +112,9 @@ jobs:
             FL_ANDROID_BUILD_TYPE: "${BUILD_TYPE}"
             FL_ANDROID_SKIP_SIGNING: "${SKIP_SIGNING}"
             FL_ANDROID_STORE_FILE: /tmp/__keystore.jks
-            FL_ANDROID_STORE_PASSWORD: "${STORE_PASSWORD}"
-            FL_ANDROID_KEY_ALIAS: "${KEY_ALIAS}"
-            FL_ANDROID_KEY_PASSWORD: "${KEY_PASSWORD}"
+            FL_ANDROID_STORE_PASSWORD: "${FL_KEY_STORE_PASSWORD}"
+            FL_ANDROID_KEY_ALIAS: "${FL_KEY_ALIAS}"
+            FL_ANDROID_KEY_PASSWORD: "${FL_KEY_PASSWORD}"
 
 workflows:
   version: 2
