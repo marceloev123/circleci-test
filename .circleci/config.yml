@@ -17,6 +17,10 @@ jobs:
         type: string
         default: "17"
         description: "Java version"
+      android_home:
+        type: string
+        default: ""
+        description: "Android SDK path"
       enforced_branch:
         type: string
         default: ""
