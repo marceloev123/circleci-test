@@ -83,7 +83,7 @@ jobs:
           command: echo "${google_json_key_base64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
-          command: echo "${key_store_base64}" | base64 -d > /tmp/__keystore.jks
+          command: echo "${KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
       - run:
           name: Install yarn
           command: sudo npm install -g yarn
@@ -119,18 +119,17 @@ workflows:
     jobs:
       - build:
           BUILD_LANE: "android"
-          RUN_ID_AS_BUILD: "${run_id_as_build}"
-          ENFORCED_BRANCH: "${enforced_branch}"
-          COMMIT_INCREMENT: "${commit_increment}"
+          RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
+          ENFORCED_BRANCH: "${ENFORCED_BRANCH}"
+          COMMIT_INCREMENT: "${COMMIT_INCREMENT}"
           PACKAGE_NAME: "com.example.app"
-          GOOGLE_JSON_KEY_BASE64: "${google_json_key_base64}"
+          GOOGLE_JSON_KEY_BASE64: "${GOOGLE_JSON_KEY_BASE64}"
           ARTIFACT: "apk"
           ANDROID_HOME: "/usr/local/android-sdk"
-          FLAVOR: "${flavor}"
+          FLAVOR: "${FLAVOR}"
           BUILD_TYPE: "Debug"
           SKIP_SIGNING: "true"
-          KEY_STORE_BASE64: "${key_store_base64}"
-          KEY_STORE_PASSWORD: "${key_store_password}"
-          KEY_ALIAS: "${key_alias}"
-          KEY_PASSWORD: "${key_password}"
-
+          KEY_STORE_BASE64: "${KEY_STORE_BASE64}"
+          KEY_STORE_PASSWORD: "${KEY_STORE_PASSWORD}"
+          KEY_ALIAS: "${KEY_ALIAS}"
+          KEY_PASSWORD: "${KEY_PASSWORD}"
