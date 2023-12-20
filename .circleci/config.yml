@@ -9,55 +9,54 @@ jobs:
     docker:
       - image: cimg/base:stable
     parameters:
-      build_lane:
+      BUILD_LANE:
         type: string
         default: "android"
         description: "The name of the fastlane lane to run"
-      java_version:
+      JAVA_VERSION:
         type: string
         default: "17"
         description: "Java version"
-      android_home:
+      ANDROID_HOME:
         type: string
         default: ""
         description: "Android SDK path"
-      enforced_branch:
+      ENFORCED_BRANCH:
         type: string
         default: ""
-      run_id_as_build:
+      RUN_ID_AS_BUILD:
         type: string
         default: "true"
-      commit_increment:
+      COMMIT_INCREMENT:
         type: string
         default: ""
-      publish_build:
+      PUBLISH_BUILD:
         type: string
         default: "true"
-      package_name:
+      PACKAGE_NAME:
         type: string
-      google_json_key_base64:
+      GOOGLE_JSON_KEY_BASE64:
         type: string
-      artifact:
+      ARTIFACT:
         type: string
         default: "aab"
-      flavor:
+      FLAVOR:
         type: string
-      build_type:
+      BUILD_TYPE:
         type: string
         default: "Release"
-      skip_signing:
+      SKIP_SIGNING:
         type: string
         default: "false"
-      key_store_base64:
+      KEY_STORE_BASE64:
         type: string
-      key_store_password:
+      KEY_STORE_PASSWORD:
         type: string
-      key_alias:
+      KEY_ALIAS:
         type: string
-      key_password:
+      KEY_PASSWORD:
         type: string
         description: "Android Keystore key password (required if signing is enabled)"
-
     steps:
       - checkout
       # Install OpenJDK 17 (Java)
@@ -76,7 +75,6 @@ jobs:
             sudo apt install -y curl
             curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
             sudo apt install -y nodejs
-            echo ${ANDROID_HOME}
             node -v
       - ruby/install:
           version: "3.1.2"
@@ -98,40 +96,41 @@ jobs:
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
           environment:
-            build_lane: "beta"
-            run_id_as_build: "${run_id_as_build}"
-            run_id: "${CIRCLECI_BUILD_NUM}"
-            enforced_branch: "${enforced_branch}"
-            commit_increment: "${commit_increment}"
-            package_name: "${package_name}"
-            google_json_file: /tmp/__google_credentials.json
-            android_home: /usr/local/android-sdk-linux ./gradlew
-            android_artifact: "${artifact}"
-            android_flavor: "${flavor}"
-            android_build_type: "${build_type}"
-            android_skip_signing: "${skip_signing}"
-            android_store_file: /tmp/__keystore.jks
-            android_store_password: "${key_store_password}"
-            android_key_alias: "${key_alias}"
-            android_key_password: "${key_password}"
+            BUILD_LANE: "beta"
+            RUN_ID_AS_BUILD: "${run_id_as_build}"
+            RUN_ID: "${CIRCLECI_BUILD_NUM}"
+            ENFORCED_BRANCH: "${enforced_branch}"
+            COMMIT_INCREMENT: "${commit_increment}"
+            PACKAGE_NAME: "${package_name}"
+            GOOGLE_JSON_FILE: /tmp/__google_credentials.json
+            ANDROID_HOME: /usr/local/android-sdk-linux
+            ANDROID_ARTIFACT: "${artifact}"
+            ANDROID_FLAVOR: "${flavor}"
+            ANDROID_BUILD_TYPE: "${build_type}"
+            ANDROID_SKIP_SIGNING: "${skip_signing}"
+            ANDROID_STORE_FILE: /tmp/__keystore.jks
+            ANDROID_STORE_PASSWORD: "${key_store_password}"
+            ANDROID_KEY_ALIAS: "${key_alias}"
+            ANDROID_KEY_PASSWORD: "${key_password}"
 
 workflows:
   version: 2
   build:
     jobs:
       - build:
-          build_lane: "android"
-          run_id_as_build: "${run_id_as_build}"
-          enforced_branch: "${enforced_branch}"
-          commit_increment: "${commit_increment}"
-          package_name: "com.example.app"
-          google_json_key_base64: "${google_json_key_base64}"
-          artifact: "apk"
-          android_home: "/usr/local/android-sdk"
-          flavor: "${flavor}"
-          build_type: "Debug"
-          skip_signing: "true"
-          key_store_base64: "${key_store_base64}"
-          key_store_password: "${key_store_password}"
-          key_alias: "${key_alias}"
-          key_password: "${key_password}"
+          BUILD_LANE: "android"
+          RUN_ID_AS_BUILD: "${run_id_as_build}"
+          ENFORCED_BRANCH: "${enforced_branch}"
+          COMMIT_INCREMENT: "${commit_increment}"
+          PACKAGE_NAME: "com.example.app"
+          GOOGLE_JSON_KEY_BASE64: "${google_json_key_base64}"
+          ARTIFACT: "apk"
+          ANDROID_HOME: "/usr/local/android-sdk"
+          FLAVOR: "${flavor}"
+          BUILD_TYPE: "Debug"
+          SKIP_SIGNING: "true"
+          KEY_STORE_BASE64: "${key_store_base64}"
+          KEY_STORE_PASSWORD: "${key_store_password}"
+          KEY_ALIAS: "${key_alias}"
+          KEY_PASSWORD: "${key_password}"
+
