@@ -110,7 +110,7 @@ jobs:
             FL_ARTIFACT: "${FL_ARTIFACT}"
             FL_FLAVOR: "${FL_FLAVOR}"
             FL_BUILD_TYPE: "${BUILD_TYPE}"
-            FL_SKIP_SIGNING: "${SKIP_SIGNING}"
+            FL_SKIP_SIGNING: "true"
             FL_ANDROID_STORE_FILE: /tmp/__keystore.jks
             FL_KEY_STORE_PASSWORD: /tmp/__keystore.jks
             FL_KEY_ALIAS: "trak"
