@@ -79,7 +79,7 @@ jobs:
             node -v
       - ruby/install:
           version: "3.1.2"
-     - run:
+      - run:
           name: Create Google JSON file
           if: ${{ parameters.google-json-key-base64 != '' }}
           command: |
@@ -100,42 +100,26 @@ jobs:
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
-        environment:
-          FL_BUILD_LANE: << parameters.build-lane >>
-          FL_JAVA_VERSION: << parameters.java-version >>
-          FL_ENFORCED_BRANCH: << parameters.enforced-branch >>
-          FL_BUILD_NUMBER: << parameters.build-number >>
-          FL_COMMIT_INCREMENT: << parameters.commit-increment >>
-          FL_PUBLISH_BUILD: << parameters.publish-build >>
-          FL_UPLOAD_ARTIFACTS: << parameters.upload-artifacts >>
-          FL_PACKAGE_NAME: << parameters.package-name >>
-          FL_GOOGLE_JSON_KEY_BASE64: << parameters.google-json-key-base64 >>
-          FL_ARTIFACT: << parameters.artifact >>
-          FL_FLAVOR: << parameters.flavor >>
-          FL_BUILD_TYPE: << parameters.build-type >>
-          FL_SKIP_SIGNING: << parameters.skip-signing >>
-          FL_KEY_STORE_BASE64: << parameters.key-store-base64 >>
-          FL_KEY_STORE_PASSWORD: << parameters.key-store-password >>
 
 workflows:
   version: 2
   build:
     jobs:
       - build:
-          build-lane: ${FL_BUILD_LANE}
-          java-version: ${FL_JAVA_VERSION}
-          enforced-branch: ${FL_ENFORCED_BRANCH}
-          build-number: ${FL_BUILD_NUMBER}
-          commit-increment: ${FL_COMMIT_INCREMENT}
-          publish-build: ${FL_PUBLISH_BUILD}
-          upload-artifacts: ${FL_UPLOAD_ARTIFACTS}
-          package-name: ${FL_PACKAGE_NAME}
-          google-json-key-base64: ${FL_GOOGLE_JSON_KEY_BASE64}
-          artifact: ${FL_ARTIFACT}
-          flavor: ${FL_FLAVOR}
-          build-type: ${FL_BUILD_TYPE}
-          skip-signing: ${FL_SKIP_SIGNING}
-          key-store-base64: ${FL_KEY_STORE_BASE64}
-          key-store-password: ${FL_KEY_STORE_PASSWORD}
-          key-alias: "circleci"
-          key-password: "circleci"
+          build-lane: "${{ parameters.build-lane }}"
+          java-version: "${{ parameters.java-version }}"
+          enforced-branch: "${{ parameters.enforced-branch }}"
+          build-number: "${{ parameters.build-number }}"
+          commit-increment: "${{ parameters.commit-increment }}"
+          publish-build: "${{ parameters.publish-build }}"
+          upload-artifacts: "${{ parameters.upload-artifacts }}"
+          package-name: "${{ parameters.package-name }}"
+          google-json-key-base64: "${{ parameters.google-json-key-base64 }}"
+          artifact: "${{ parameters.artifact }}"
+          flavor: "${{ parameters.flavor }}"
+          build-type: "${{ parameters.build-type }}"
+          skip-signing: "${{ parameters.skip-signing }}"
+          key-store-base64: "${{ parameters.key-store-base64 }}"
+          key-store-password: "${{ parameters.key-store-password }}"
+          key-alias: "${{ parameters.key-alias }}"
+          key-password: "${{ parameters.key-password }}"
