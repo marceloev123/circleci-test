@@ -1,62 +1,63 @@
 version: 2.1
 
-orbs:
-  ruby: circleci/ruby@2.1.0
-  gradle: circleci/gradle@3.0.0
+parameters:
+  build-lane:
+    type: string
+    default: "beta"
+  java-version:
+    type: string
+    default: "17"
+  enforced-branch:
+    type: string
+    default: ""
+  build-number:
+    type: string
+    default: "github"
+  commit-increment:
+    type: string
+    default: "false"
+  publish-build:
+    type: string
+    default: "true"
+  upload-artifacts:
+    type: string
+    default: "false"
+  package-name:
+    type: string
+  google-json-key-base64:
+    type: string
+    default: ""
+  artifact:
+    type: string
+    default: "aab"
+  flavor:
+    type: string
+    default: ""
+  build-type:
+    type: string
+    default: "Release"
+  skip-signing:
+    type: string
+    default: "false"
+  key-store-base64:
+    type: string
+    default: ""
+  key-store-password:
+    type: string
+    default: ""
+  key-alias:
+    type: string
+    default: ""
+  key-password:
+    type: string
+    default: ""
 
 jobs:
   build:
     docker:
       - image: cimg/base:stable
-    parameters:
-      BUILD_LANE:
-        type: string
-        default: "android"
-        description: "The name of the fastlane lane to run"
-      JAVA_VERSION:
-        type: string
-        default: "17"
-        description: "Java version"
-      ANDROID_HOME:
-        type: string
-        default: ""
-        description: "Android SDK path"
-      FL_ANDROID_ENFORCED_BRANCH:
-        type: string
-        default: ""
-      RUN_ID_AS_BUILD:
-        type: string
-        default: "true"
-      FL_COMMIT_INCREMENT:
-        type: string
-        default: ""
-      PUBLISH_BUILD:
-        type: string
-        default: "true"
-      FL_ANDROID_PACKAGE_NAME:
-        type: string
-      FL_ANDROID_GOOGLE_JSON_KEY_BASE64:
-        type: string
-      FL_ANDROID_ARTIFACT:
-        type: string
-        default: "aab"
-      FL_ANDROID_FLAVOR:
-        type: string
-      FL_ANDROID_BUILD_TYPE:
-        type: string
-        default: "Release"
-      FL_ANDROID_SKIP_SIGNING:
-        type: string
-        default: "false"
-      FL_ANDROID_KEY_STORE_BASE64:
-        type: string
-      FL_ANDROID_KEY_STORE_PASSWORD:
-        type: string
-      FL_ANDROID_KEY_ALIAS:
-        type: string
-      FL_ANDROID_KEY_PASSWORD:
-        type: string
-        description: "Android Keystore key password (required if signing is enabled)"
+    environment:
+      TMPDIR: /tmp
     steps:
       - checkout
       - run:
@@ -73,19 +74,31 @@ jobs:
             curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
             sudo apt install -y nodejs
             node -v
-      - ruby/install:
-          version: "3.1.2"
+      - run:
+          name: Install Ruby 3.1.2
+          command: |
+            sudo apt-get install -y software-properties-common
+            sudo apt-add-repository -y ppa:rael-gc/rvm
+            sudo apt-get update
+            sudo apt-get install -y rvm
+            source /etc/profile.d/rvm.sh
+            rvm install 3.1.2
+            rvm use 3.1.2
       - run:
           name: Create Google JSON file
-          command: echo "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}" | base64 -d > /tmp/__google_credentials.json
+          if: ${{ parameters.google-json-key-base64 != '' }}
+          command: |
+            echo "${{ parameters.google-json-key-base64 }}" | base64 -d > "${TMPDIR}/__google_credentials.json"
       - run:
           name: Create Keystore file
-          command: echo "${FL_ANDROID_KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
+          if: ${{ parameters.key-store-base64 != '' }}
+          command: |
+            echo "${{ parameters.key-store-base64 }}" | base64 -d > "${TMPDIR}/__keystore.jks"
       - run:
-          name: Install yarn
+          name: Install Yarn
           command: sudo npm install -g yarn
       - run:
-          name: Install expo
+          name: Install Expo
           command: yarn add expo
       - run:
           name: Run Fastlane
@@ -98,18 +111,20 @@ workflows:
   build:
     jobs:
       - build:
-          BUILD_LANE: "android"
-          RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
-          FL_ANDROID_ENFORCED_BRANCH: "${FL_ANDROID_ENFORCED_BRANCH}"
-          FL_COMMIT_INCREMENT: "${FL_COMMIT_INCREMENT}"
-          FL_ANDROID_PACKAGE_NAME: "com.example.app"
-          FL_ANDROID_GOOGLE_JSON_KEY_BASE64: "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}"
-          FL_ANDROID_ARTIFACT: "apk"
-          ANDROID_HOME: "/usr/local/android-sdk"
-          FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
-          FL_ANDROID_BUILD_TYPE: "Debug"
-          FL_ANDROID_SKIP_SIGNING: "true"
-          FL_ANDROID_KEY_STORE_BASE64: "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"
-          FL_ANDROID_KEY_STORE_PASSWORD: "circleci"
-          FL_ANDROID_KEY_ALIAS: "circleci"
-          FL_ANDROID_KEY_PASSWORD: "circleci"
+          build-lane: "${{ parameters.build-lane }}"
+          java-version: "${{ parameters.java-version }}"
+          enforced-branch: "${{ parameters.enforced-branch }}"
+          build-number: "${{ parameters.build-number }}"
+          commit-increment: "${{ parameters.commit-increment }}"
+          publish-build: "${{ parameters.publish-build }}"
+          upload-artifacts: "${{ parameters.upload-artifacts }}"
+          package-name: "${{ parameters.package-name }}"
+          google-json-key-base64: "${{ parameters.google-json-key-base64 }}"
+          artifact: "${{ parameters.artifact }}"
+          flavor: "${{ parameters.flavor }}"
+          build-type: "${{ parameters.build-type }}"
+          skip-signing: "${{ parameters.skip-signing }}"
+          key-store-base64: "${{ parameters.key-store-base64 }}"
+          key-store-password: "${{ parameters.key-store-password }}"
+          key-alias: "${{ parameters.key-alias }}"
+          key-password: "${{ parameters.key-password }}"
