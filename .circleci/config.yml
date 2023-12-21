@@ -81,14 +81,14 @@ jobs:
           version: "3.1.2"
       - run:
           name: Create Google JSON file
-          if: ${{ parameters.google-json-key-base64 != '' }}
+          if: << parameters.google-json-key-base64 != '' >>
           command: |
-            echo "${{ parameters.google-json-key-base64 }}" | base64 -d > "${TMPDIR}/__google_credentials.json"
+            echo "<< parameters.google-json-key-base64 >>" | base64 -d > "${TMPDIR}/__google_credentials.json"
       - run:
           name: Create Keystore file
-          if: ${{ parameters.key-store-base64 != '' }}
+          if: << parameters.key-store-base64 != '' >>
           command: |
-            echo "${{ parameters.key-store-base64 }}" | base64 -d > "${TMPDIR}/__keystore.jks"
+            echo "<< parameters.key-store-base64 >>" | base64 -d > "${TMPDIR}/__keystore.jks"
       - run:
           name: Install Yarn
           command: sudo npm install -g yarn
@@ -100,26 +100,27 @@ jobs:
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
+        environment
 
 workflows:
   version: 2
   build:
     jobs:
       - build:
-          build-lane: "${{ parameters.build-lane }}"
-          java-version: "${{ parameters.java-version }}"
-          enforced-branch: "${{ parameters.enforced-branch }}"
-          build-number: "${{ parameters.build-number }}"
-          commit-increment: "${{ parameters.commit-increment }}"
-          publish-build: "${{ parameters.publish-build }}"
-          upload-artifacts: "${{ parameters.upload-artifacts }}"
-          package-name: "${{ parameters.package-name }}"
-          google-json-key-base64: "${{ parameters.google-json-key-base64 }}"
-          artifact: "${{ parameters.artifact }}"
-          flavor: "${{ parameters.flavor }}"
-          build-type: "${{ parameters.build-type }}"
-          skip-signing: "${{ parameters.skip-signing }}"
-          key-store-base64: "${{ parameters.key-store-base64 }}"
-          key-store-password: "${{ parameters.key-store-password }}"
-          key-alias: "${{ parameters.key-alias }}"
-          key-password: "${{ parameters.key-password }}"
+          build-lane: "<< parameters.build-lane >>"
+          java-version: "<< parameters.java-version >>"
+          enforced-branch: "<< parameters.enforced-branch >>"
+          build-number: "<< parameters.build-number >>"
+          commit-increment: "<< parameters.commit-increment >>"
+          publish-build: "<< parameters.publish-build >>"
+          upload-artifacts: "<< parameters.upload-artifacts >>"
+          package-name: "<< parameters.package-name >>"
+          google-json-key-base64: "<< parameters.google-json-key-base64 >>"
+          artifact: "<< parameters.artifact >>"
+          flavor: "<< parameters.flavor >>"
+          build-type: "<< parameters.build-type >>"
+          skip-signing: "<< parameters.skip-signing >>"
+          key-store-base64: "<< parameters.key-store-base64 >>"
+          key-store-password: "<< parameters.key-store-password >>"
+          key-alias: "<< parameters.key-alias >>"
+          key-password: "<< parameters.key-password >>"
