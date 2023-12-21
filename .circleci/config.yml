@@ -79,16 +79,16 @@ jobs:
             node -v
       - ruby/install:
           version: "3.1.2"
-      - run:
+     - run:
           name: Create Google JSON file
-          if: << parameters.google-json-key-base64 != '' >>
+          if: ${{ parameters.google-json-key-base64 != '' }}
           command: |
-            echo "<< parameters.google-json-key-base64 >>" | base64 -d > "${TMPDIR}/__google_credentials.json"
+            echo "${{ parameters.google-json-key-base64 }}" | base64 -d > "${TMPDIR}/__google_credentials.json"
       - run:
           name: Create Keystore file
-          if: << parameters.key-store-base64 != '' >>
+          if: ${{ parameters.key-store-base64 != '' }}
           command: |
-            echo "<< parameters.key-store-base64 >>" | base64 -d > "${TMPDIR}/__keystore.jks"
+            echo "${{ parameters.key-store-base64 }}" | base64 -d > "${TMPDIR}/__keystore.jks"
       - run:
           name: Install Yarn
           command: sudo npm install -g yarn
@@ -100,6 +100,22 @@ jobs:
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
+        environment:
+          FL_BUILD_LANE: << parameters.build-lane >>
+          FL_JAVA_VERSION: << parameters.java-version >>
+          FL_ENFORCED_BRANCH: << parameters.enforced-branch >>
+          FL_BUILD_NUMBER: << parameters.build-number >>
+          FL_COMMIT_INCREMENT: << parameters.commit-increment >>
+          FL_PUBLISH_BUILD: << parameters.publish-build >>
+          FL_UPLOAD_ARTIFACTS: << parameters.upload-artifacts >>
+          FL_PACKAGE_NAME: << parameters.package-name >>
+          FL_GOOGLE_JSON_KEY_BASE64: << parameters.google-json-key-base64 >>
+          FL_ARTIFACT: << parameters.artifact >>
+          FL_FLAVOR: << parameters.flavor >>
+          FL_BUILD_TYPE: << parameters.build-type >>
+          FL_SKIP_SIGNING: << parameters.skip-signing >>
+          FL_KEY_STORE_BASE64: << parameters.key-store-base64 >>
+          FL_KEY_STORE_PASSWORD: << parameters.key-store-password >>
 
 workflows:
   version: 2
