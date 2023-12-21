@@ -80,8 +80,7 @@ jobs:
           command: echo "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
-          command: echo "${FL_ANDROID_KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
-      - run:
+       - run:
           name: Install yarn
           command: sudo npm install -g yarn
       - run:
@@ -92,24 +91,6 @@ jobs:
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
-          environment:
-            BUILD_LANE: "${BUILD_LANE}"
-            RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
-            ANDROID_HOME: /usr/local/android-sdk-linux
-            FL_ANDROID_ENFORCED_BRANCH: "${FL_ANDROID_ENFORCED_BRANCH}"
-            FL_COMMIT_INCREMENT: "${FL_COMMIT_INCREMENT}"
-            FL_ANDROID_PACKAGE_NAME: "${FL_ANDROID_PACKAGE_NAME}"
-            FL_ANDROID_GOOGLE_JSON_FILE: /tmp/__google_credentials.json
-            FL_ANDROID_KEY_STORE_BASE64: "${FL_ANDROID_KEY_STORE_BASE64}"
-            FL_ANDROID_KEY_STORE: /tmp/__keystore.jks
-            FL_ANDROID_ARTIFACT: "${FL_ANDROID_ARTIFACT}"
-            FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
-            FL_ANDROID_BUILD_TYPE: "${FL_ANDROID_BUILD_TYPE}"
-            FL_ANDROID_SKIP_SIGNING: "${FL_ANDROID_SKIP_SIGNING}"
-            FL_ANDROID_ANDROID_STORE_FILE: /tmp/__keystore.jks
-            FL_ANDROID_KEY_STORE_PASSWORD: "${FL_ANDROID_KEY_STORE_PASSWORD}"
-            FL_ANDROID_KEY_ALIAS: "${FL_ANDROID_KEY_ALIAS}"
-            FL_ANDROID_KEY_PASSWORD: "${FL_ANDROID_KEY_PASSWORD}"
 
 workflows:
   version: 2
@@ -123,7 +104,7 @@ workflows:
           FL_ANDROID_PACKAGE_NAME: "com.example.app"
           FL_ANDROID_GOOGLE_JSON_KEY_BASE64: "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}"
           FL_ANDROID_ARTIFACT: "apk"
-          ANDROID_HOME: "/usr/local/android-sdk"
+          ANDROID_HOME: "/usr/local/android-sdk-linux"
           FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
           FL_ANDROID_BUILD_TYPE: "Debug"
           FL_ANDROID_SKIP_SIGNING: "${FL_ANDROID_SKIP_SIGNING}"
