@@ -12,7 +12,7 @@ jobs:
       BUILD_LANE:
         type: string
         default: "android"
-        description: "Name of the Fastlane lane to run"
+        description: "The name of the fastlane lane to run"
       JAVA_VERSION:
         type: string
         default: "17"
@@ -80,17 +80,35 @@ jobs:
           command: echo "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
-      - run:
-          name: Install Yarn
+       - run:
+          name: Install yarn
           command: sudo npm install -g yarn
       - run:
-          name: Install Expo
+          name: Install expo
           command: yarn add expo
       - run:
           name: Run Fastlane
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
+          environment:
+            BUILD_LANE: "${BUILD_LANE}"
+            RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
+            ANDROID_HOME: /usr/local/android-sdk-linux
+            FL_ANDROID_ENFORCED_BRANCH: "${FL_ANDROID_ENFORCED_BRANCH}"
+            FL_COMMIT_INCREMENT: "${FL_COMMIT_INCREMENT}"
+            FL_ANDROID_PACKAGE_NAME: "${FL_ANDROID_PACKAGE_NAME}"
+            FL_ANDROID_GOOGLE_JSON_FILE: /tmp/__google_credentials.json
+            FL_ANDROID_KEY_STORE_BASE64: "${FL_ANDROID_KEY_STORE_BASE64}"
+            FL_ANDROID_KEY_STORE: /tmp/__keystore.jks
+            FL_ANDROID_ARTIFACT: "${FL_ANDROID_ARTIFACT}"
+            FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
+            FL_ANDROID_BUILD_TYPE: "${FL_ANDROID_BUILD_TYPE}"
+            FL_ANDROID_SKIP_SIGNING: "${FL_ANDROID_SKIP_SIGNING}"
+            FL_ANDROID_ANDROID_STORE_FILE: /tmp/__keystore.jks
+            FL_ANDROID_KEY_STORE_PASSWORD: "${FL_ANDROID_KEY_STORE_PASSWORD}"
+            FL_ANDROID_KEY_ALIAS: "${FL_ANDROID_KEY_ALIAS}"
+            FL_ANDROID_KEY_PASSWORD: "${FL_ANDROID_KEY_PASSWORD}"
 
 workflows:
   version: 2
