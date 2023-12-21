@@ -83,7 +83,7 @@ jobs:
           command: echo "${google_json_key_base64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
-          command: echo "${KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
+          command: echo "${FL_KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
       - run:
           name: Install yarn
           command: sudo npm install -g yarn
