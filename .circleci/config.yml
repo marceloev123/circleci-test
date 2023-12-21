@@ -12,7 +12,7 @@ jobs:
       BUILD_LANE:
         type: string
         default: "android"
-        description: "The name of the fastlane lane to run"
+        description: "Name of the Fastlane lane to run"
       JAVA_VERSION:
         type: string
         default: "17"
@@ -80,18 +80,18 @@ jobs:
           command: echo "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
-       - run:
-          name: Install yarn
+      - run:
+          name: Install Yarn
           command: sudo npm install -g yarn
       - run:
-          name: Install expo
+          name: Install Expo
           command: yarn add expo
       - run:
           name: Run Fastlane
           command: |
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
-            
+
 workflows:
   version: 2
   build:
