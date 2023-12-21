@@ -83,7 +83,7 @@ jobs:
           name: Create Google JSON file
           if: ${{ parameters.google-json-key-base64 != '' }}
           command: |
-            echo "${{ parameters.google-json-key-base64 }}" | base64 -d > "${TMPDIR}/__google_credentials.json"
+            echo << parameters.google-json-key-base64 >> | base64 -d > "${TMPDIR}/__google_credentials.json"
       - run:
           name: Create Keystore file
           if: ${{ parameters.key-store-base64 != '' }}
