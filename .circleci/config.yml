@@ -59,19 +59,16 @@ jobs:
         description: "Android Keystore key password (required if signing is enabled)"
     steps:
       - checkout
-      # Install OpenJDK 17 (Java)
       - run:
           name: Install OpenJDK 17
           command: |
             sudo apt-get update
             sudo apt-get install -y openjdk-17-jdk
-
-      # Install Node.js and NPM
       - run:
           name: Install Node.js and NPM
           command: |
             sudo apt-get update
-            sudo apt-get upgrade
+            sudo apt-get upgrade -y
             sudo apt install -y curl
             curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
             sudo apt install -y nodejs
@@ -80,7 +77,7 @@ jobs:
           version: "3.1.2"
       - run:
           name: Create Google JSON file
-          command: echo "${google_json_key_base64}" | base64 -d > /tmp/__google_credentials.json
+          command: echo "${FL_ANDROID_GOOGLE_JSON_KEY_BASE64}" | base64 -d > /tmp/__google_credentials.json
       - run:
           name: Create Keystore file
           command: echo "${FL_ANDROID_KEY_STORE_BASE64}" | base64 -d > /tmp/__keystore.jks
@@ -96,25 +93,23 @@ jobs:
             chmod +x .circleci/fastlane.sh
             .circleci/fastlane.sh
           environment:
-            BUILD_LANE: "beta"
+            BUILD_LANE: "${BUILD_LANE}"
             RUN_ID_AS_BUILD: "${RUN_ID_AS_BUILD}"
-            RUN_ID: "${CIRCLECI_BUILD_NUM}"
             ANDROID_HOME: /usr/local/android-sdk-linux
             FL_ANDROID_ENFORCED_BRANCH: "${FL_ANDROID_ENFORCED_BRANCH}"
             FL_COMMIT_INCREMENT: "${FL_COMMIT_INCREMENT}"
-            FL_ANDROID_PUBLISH_BUILD: "${FL_ANDROID_PUBLISH_BUILD}"
-            FL_ANDROID_PACKAGE_NAME: "${PACKAGE_NAME}"
+            FL_ANDROID_PACKAGE_NAME: "${FL_ANDROID_PACKAGE_NAME}"
             FL_ANDROID_GOOGLE_JSON_FILE: /tmp/__google_credentials.json
-            FL_ANDROID_KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
+            FL_ANDROID_KEY_STORE_BASE64: "${FL_ANDROID_KEY_STORE_BASE64}"
             FL_ANDROID_KEY_STORE: /tmp/__keystore.jks
             FL_ANDROID_ARTIFACT: "${FL_ANDROID_ARTIFACT}"
             FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
-            FL_ANDROID_FL_ANDROID_BUILD_TYPE: "${FL_ANDROID_BUILD_TYPE}"
-            FL_ANDROID_FL_ANDROID_SKIP_SIGNING: "true"
+            FL_ANDROID_BUILD_TYPE: "${FL_ANDROID_BUILD_TYPE}"
+            FL_ANDROID_SKIP_SIGNING: "${FL_ANDROID_SKIP_SIGNING}"
             FL_ANDROID_ANDROID_STORE_FILE: /tmp/__keystore.jks
-            FL_ANDROID_KEY_STORE_PASSWORD: /tmp/__keystore.jks
-            FL_ANDROID_KEY_ALIAS: "trak"
-            FL_ANDROID_KEY_PASSWORD: "llawliet"
+            FL_ANDROID_KEY_STORE_PASSWORD: "${FL_ANDROID_KEY_STORE_PASSWORD}"
+            FL_ANDROID_KEY_ALIAS: "${FL_ANDROID_KEY_ALIAS}"
+            FL_ANDROID_KEY_PASSWORD: "${FL_ANDROID_KEY_PASSWORD}"
 
 workflows:
   version: 2
@@ -131,8 +126,8 @@ workflows:
           ANDROID_HOME: "/usr/local/android-sdk"
           FL_ANDROID_FLAVOR: "${FL_ANDROID_FLAVOR}"
           FL_ANDROID_BUILD_TYPE: "Debug"
-          FL_ANDROID_SKIP_SIGNING: "true"
-          FL_ANDROID_KEY_STORE_BASE64: MIIKvAIBAzCCCmYGCSqGSIb3DQEHAaCCClcEggpTMIIKTzCCBbYGCSqGSIb3DQEHAaCCBacEggWjMIIFnzCCBZsGCyqGSIb3DQEMCgECoIIFQDCCBTwwZgYJKoZIhvcNAQUNMFkwOAYJKoZIhvcNAQUMMCsEFI
+          FL_ANDROID_SKIP_SIGNING: "${FL_ANDROID_SKIP_SIGNING}"
+          FL_ANDROID_KEY_STORE_BASE64: "${FL_ANDROID_KEY_STORE_BASE64}"
           FL_ANDROID_KEY_STORE_PASSWORD: "${FL_ANDROID_KEY_STORE_PASSWORD}"
           FL_ANDROID_KEY_ALIAS: "${FL_ANDROID_KEY_ALIAS}"
           FL_ANDROID_KEY_PASSWORD: "${FL_ANDROID_KEY_PASSWORD}"
