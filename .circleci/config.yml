@@ -1,61 +1,64 @@
 version: 2.1
 
-parameters:
-  build-lane:
-    type: string
-    default: "beta"
-  java-version:
-    type: string
-    default: "17"
-  enforced-branch:
-    type: string
-    default: ""
-  build-number:
-    type: string
-    default: "github"
-  commit-increment:
-    type: string
-    default: "false"
-  publish-build:
-    type: string
-    default: "true"
-  upload-artifacts:
-    type: string
-    default: "false"
-  package-name:
-    type: string
-  google-json-key-base64:
-    type: string
-    default: ""
-  artifact:
-    type: string
-    default: "aab"
-  flavor:
-    type: string
-    default: ""
-  build-type:
-    type: string
-    default: "Release"
-  skip-signing:
-    type: string
-    default: "false"
-  key-store-base64:
-    type: string
-    default: ""
-  key-store-password:
-    type: string
-    default: ""
-  key-alias:
-    type: string
-    default: ""
-  key-password:
-    type: string
-    default: ""
+orbs:
+  ruby: circleci/ruby@2.1.0
+  gradle: circleci/gradle@3.0.0
 
 jobs:
   build:
     docker:
       - image: cimg/base:stable
+    parameters:
+      build-lane:
+        type: string
+        default: "beta"
+      java-version:
+        type: string
+        default: "17"
+      enforced-branch:
+        type: string
+        default: ""
+      build-number:
+        type: string
+        default: "github"
+      commit-increment:
+        type: string
+        default: "false"
+      publish-build:
+        type: string
+        default: "true"
+      upload-artifacts:
+        type: string
+        default: "false"
+      package-name:
+        type: string
+      google-json-key-base64:
+        type: string
+        default: ""
+      artifact:
+        type: string
+        default: "aab"
+      flavor:
+        type: string
+        default: ""
+      build-type:
+        type: string
+        default: "Release"
+      skip-signing:
+        type: string
+        default: "false"
+      key-store-base64:
+        type: string
+        default: ""
+      key-store-password:
+        type: string
+        default: ""
+      key-alias:
+        type: string
+        default: ""
+      key-password:
+        type: string
+        default: ""
     environment:
       TMPDIR: /tmp
     steps:
